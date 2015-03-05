@@ -1,0 +1,29 @@
+nav:before{
+    border-bottom: 1px solid #dfdfdf;
+    content: "";
+    margin: 0 auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+#primary-nav{
+    display: flex;
+    display: -webkit-flex;
+    justify-content: flex-end;
+    -webkit-justify-content: flex-end;
+}
+#primary-nav ul{
+    width: auto;
+}
+#primary-nav ul li{
+    width: 110px;
+}
+#primary-nav a{
+    font-size: 1.5em;
+    padding: 20px 25px;
+}
+.nested-header .page-header{
+    
+}
