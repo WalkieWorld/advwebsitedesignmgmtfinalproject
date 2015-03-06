@@ -24,6 +24,22 @@ nav:before{
     font-size: 1.5em;
     padding: 20px 25px;
 }
+.nav-tabs.nav-justified>.active>a, .nav-tabs.nav-justified>.active>a:focus, .nav-tabs.nav-justified>.active>a:hover
+{
+    background-color: #FF6D52;
+    border-bottom-color: #FF6D52;
+    color: #ffffff;
+}
+.nav>li>a:focus, .nav>li>a:hover {
+    text-decoration: none;
+    background-color: #FF6D52;
+    color: #ffffff;
+}
+.nested-header{
+    background-color: #FF6D52;
+}
 .nested-header .page-header{
-    margin-top: 160px;
+    margin-top: 72px;
+    height: 160px;
+    color: #ffffff;
 }
