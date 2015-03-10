@@ -30,7 +30,7 @@
         </section>
     </nav>
     <header class="nested-header">
-        <section class="page-header container">
+        <section data-page="index" class="page-header container">
             <h2>
                 My Final Project
             </h2>
@@ -40,58 +40,62 @@
 <section class="main-body">
     <section class="container">
         <hr>
-        <form class="form-horizontal" id="myForm">
-            <section class="form-group">
-                <label for="inputFN" class="col-sm-2 control-label">First Name</label>
-                <aside class="col-sm-10">
-                    <input type="text" class="form-control" id="inputFN" placeholder="First Name">
-                </aside>
-            </section>
-            <section class="form-group">
-                <label for="inputLN" class="col-sm-2 control-label">Last Name</label>
-                <aside class="col-sm-10">
-                    <input type="text" class="form-control" id="inputLN" placeholder="Last Name">
-                </aside>
-            </section>
-            <section class="form-group">
-                <label for="majorSelect" class="col-sm-2 control-label">Major</label>
-                <aside class="col-sm-10">
-                    <select id="majorSelect" class="form-control">
-                        <option value=""></option>
-                        <option value="Database Design and Administration">Database Design and Administration</option>
-                        <option value="Geographic Information Systems">Geographic Information Systems</option>
-                        <option value="Information Systems Security">Information Systems Security</option>
-                        <option value="Mobile Application Development">Mobile Application Development</option>
-                        <option value="Project Management">Project Management</option>
-                        <option value="Software Design and Programming">Software Design and Programming</option>
-                        <option value="Technology Management">Technology Management</option>
-                        <option value="Telecommunications Technology">Telecommunications Technology</option>
-                        <option value="Web Design and Development">Web Design and Development</option>
-                    </select>
-                </aside>
-            </section>
-            <section class="form-group">
-                <label class="col-sm-2 control-label">Degree</label>
-                <aside class="col-sm-10">
-                    <label class="radio-inline">
-                        <input type="radio" name="degreeRadioOptions" id="rBachelor" value="Bachelor"> Bachelor
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="degreeRadioOptions" id="rMaster" value="Master"> Master
-                    </label>
-                </aside>
-            </section>
-            <section class="form-group">
-                <label class="col-sm-2 control-label">Comment</label>
-                <aside class="col-sm-10">
-                    <textarea id="content" class="form-control" rows="3"></textarea>
-                </aside>
-            </section>
-            <section class="form-group">
-                <aside class="form-button">
-                    <button class="btn btn-primary" id="testPost">Test AJAX POST</button>
-                </aside>
-            </section>
+        <form class="form-horizontal" id="myPostForm" method="post" action="https://httpbin.org/post">
+            <fieldset>
+                <legend>Post Form</legend>
+                <section class="form-group">
+                    <label for="firstname" class="col-sm-2 control-label">First Name</label>
+                    <aside class="col-sm-10">
+                        <input type="text" class="form-control" id="firstname" name="firstname" placeholder="First Name" minlength="3">
+                    </aside>
+                </section>
+                <section class="form-group">
+                    <label for="lastname" class="col-sm-2 control-label">Last Name</label>
+                    <aside class="col-sm-10">
+                        <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Last Name" minlength="3">
+                    </aside>
+                </section>
+                <section class="form-group">
+                    <label for="majorSelect" class="col-sm-2 control-label">Major</label>
+                    <aside class="col-sm-10">
+                        <select id="majorSelect" name="majorSelect" class="form-control">
+                            <option value=""></option>
+                            <option value="Database Design and Administration">Database Design and Administration</option>
+                            <option value="Geographic Information Systems">Geographic Information Systems</option>
+                            <option value="Information Systems Security">Information Systems Security</option>
+                            <option value="Mobile Application Development">Mobile Application Development</option>
+                            <option value="Project Management">Project Management</option>
+                            <option value="Software Design and Programming">Software Design and Programming</option>
+                            <option value="Technology Management">Technology Management</option>
+                            <option value="Telecommunications Technology">Telecommunications Technology</option>
+                            <option value="Web Design and Development">Web Design and Development</option>
+                        </select>
+                    </aside>
+                </section>
+                <section class="form-group">
+                    <label class="col-sm-2 control-label">Degree</label>
+                    <aside class="col-sm-10">
+                        <label class="radio-inline">
+                            <input type="radio" name="degreeRadioOptions" id="rBachelor" value="Bachelor"> Bachelor
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="degreeRadioOptions" id="rMaster" value="Master"> Master
+                        </label>
+                        <label class="radio"></label>
+                    </aside>
+                </section>
+                <section class="form-group">
+                    <label class="col-sm-2 control-label">Comment</label>
+                    <aside class="col-sm-10">
+                        <textarea id="comment" name="comment" class="form-control" rows="3" aria-required="true"></textarea>
+                    </aside>
+                </section>
+                <section class="form-group">
+                    <aside class="form-button">
+                        <button class="btn btn-primary" id="testPost">Test AJAX POST</button>
+                    </aside>
+                </section>
+            </fieldset>
         </form>
         <section class="row content-horizontal">
             <article id="postResult" class="h4">

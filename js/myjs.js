@@ -3,8 +3,6 @@
  */
 
 var $MyObj = function(){
-    this.myForm = undefined;
-
     var callbackDisplayIP = function(data){
         var handler = document.getElementById("myIP");
         if(handler !== null){
@@ -25,9 +23,9 @@ $MyObj.prototype = {
             handler.addEventListener(event, fun);
         }
     },
-    postForm: function(e){
-        e.preventDefault();
-        var data = this.myForm;
+    postForm: function(){
+        var data = $("#myPostForm").serialize();
+        var result = document.getElementById("postResult");
         $.ajax({
             method: "POST",
             dataType: "html",
@@ -39,12 +37,52 @@ $MyObj.prototype = {
                 result.classList.add("alert-success");
             })
             .fail(function(jqXHR, textStatus){
-                var result = document.getElementById("postResult");
                 result.textContent = jqXHR.status + ": " + jqXHR.statusText;
                 result.classList.add("alert-danger");
             });
+    },
+    validateForm: function(){
+        var form = $("#myPostForm").validate({
+            rules: {
+                firstname: "required",
+                lastname: "required",
+                majorSelect: "required",
+                degreeRadioOptions: "required",
+                comment: "required"
+            },
+            messages: {
+                firstname: {
+                    required: "Please enter your first name!",
+                    minlength: "Your name is invalid!"
+                },
+                lastname: {
+                    required: "Please enter your first name!",
+                    minlength: "Your name is invalid!"
+                },
+                majorSelect: "Please choose your major!",
+                degreeRadioOptions: "Please choose your degree!",
+                comment: "Please comment this!"
+            },
+            errorPlacement: function(error, element) {
+                if (element.is(":radio")){
+                    error.appendTo(element.parent().next().next());
+                }else{
+                    error.appendTo(element.parent());
+                }
+            }
+        });
+        if(form.form()){
+            return true;
+        }
+
+        return false;
     }
 }
 
 var myObj = new $MyObj();
-myObj.addEvent(document.getElementById("testPost"), "click", myObj.postForm);
+myObj.addEvent(document.getElementById("testPost"), "click", function(e){
+    e.preventDefault();
+    if(myObj.validateForm()){
+        myObj.postForm();
+    }
+});

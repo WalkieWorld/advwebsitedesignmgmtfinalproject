@@ -62,6 +62,9 @@ nav:before{
     color: #ffffff;
     border-bottom: 1px;
 }
+.nested-header .page-header[data-page="index"]{
+    background: url("../images/awesomeapple2.jpg") 100% 50% no-repeat;
+}
 footer{
     position: absolute;
     bottom: 0px;
@@ -76,4 +79,9 @@ footer{
     -webkit-display: flex;
     justify-content: flex-end;
     -webkit-justify-content: flex-end;
+    margin-right: 15px;
+}
+label.error{
+    color: #a94442;
+    background-color: #f2dede;
 }
