@@ -5,7 +5,9 @@
     <meta name="author" content="Hao Zhang">
     <meta name="description" content="Final Project for Advanced Website Design & Management of DU (University of Denver)">
     <meta name="keywords" content="JavaScript/jQuery,AJAX,JSON,Flickr">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
     <link href="css/style.css" rel="stylesheet">
     <title>Home</title>
 </head>
@@ -41,67 +43,7 @@
     <section class="main-body">
         <section class="container">
             <hr>
-            <form class="form-horizontal" id="myPostForm" method="post" action="https://httpbin.org/post">
-                <fieldset>
-                    <legend>Post Form</legend>
-                    <section class="form-group">
-                        <label for="firstname" class="col-sm-2 control-label">First Name</label>
-                        <aside class="col-sm-10">
-                            <input type="text" class="form-control" id="firstname" name="firstname" placeholder="First Name" minlength="3">
-                        </aside>
-                    </section>
-                    <section class="form-group">
-                        <label for="lastname" class="col-sm-2 control-label">Last Name</label>
-                        <aside class="col-sm-10">
-                            <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Last Name" minlength="3">
-                        </aside>
-                    </section>
-                    <section class="form-group">
-                        <label for="majorSelect" class="col-sm-2 control-label">Major</label>
-                        <aside class="col-sm-10">
-                            <select id="majorSelect" name="majorSelect" class="form-control">
-                                <option value=""></option>
-                                <option value="Database Design and Administration">Database Design and Administration</option>
-                                <option value="Geographic Information Systems">Geographic Information Systems</option>
-                                <option value="Information Systems Security">Information Systems Security</option>
-                                <option value="Mobile Application Development">Mobile Application Development</option>
-                                <option value="Project Management">Project Management</option>
-                                <option value="Software Design and Programming">Software Design and Programming</option>
-                                <option value="Technology Management">Technology Management</option>
-                                <option value="Telecommunications Technology">Telecommunications Technology</option>
-                                <option value="Web Design and Development">Web Design and Development</option>
-                            </select>
-                        </aside>
-                    </section>
-                    <section class="form-group">
-                        <label class="col-sm-2 control-label">Degree</label>
-                        <aside class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="degreeRadioOptions" id="rBachelor" value="Bachelor"> Bachelor
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="degreeRadioOptions" id="rMaster" value="Master"> Master
-                            </label>
-                            <label class="radio"></label>
-                        </aside>
-                    </section>
-                    <section class="form-group">
-                        <label class="col-sm-2 control-label">Comment</label>
-                        <aside class="col-sm-10">
-                            <textarea id="comment" name="comment" class="form-control" rows="3" aria-required="true"></textarea>
-                        </aside>
-                    </section>
-                    <section class="form-group">
-                        <aside class="form-button">
-                            <button class="btn btn-primary" id="testPost">Test AJAX POST</button>
-                        </aside>
-                    </section>
-                </fieldset>
-            </form>
-            <section class="row">
-                <article id="postResult" class="h5">
-                </article>
-            </section>
+
         </section>
     </section>
     <footer>

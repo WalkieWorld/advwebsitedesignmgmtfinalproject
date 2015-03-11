@@ -26,18 +26,22 @@ $MyObj.prototype = {
     postForm: function(){
         var data = $("#myPostForm").serialize();
         var result = document.getElementById("postResult");
+        var hasShownAccordion = (function(){
+            return result.classList.contains("hidden");
+        })();
+        if(hasShownAccordion){
+            result.classList.remove("hidden");
+        }
+        result = result.querySelector("div");
         var displayResult = function(data){
             var ul = document.createElement("ul");
             var li = document.createElement("li");
             ul.classList.add("list-group");
-            li.classList.add("list-group-item");
-            li.classList.add("active");
-            li.textContent = "Successful! Respond data"
-            ul.appendChild(li);
             for(var a in data){
                 if(data.hasOwnProperty(a)){
                     li = document.createElement("li");
                     li.classList.add("list-group-item");
+                    li.classList.add("list-group-item-info");
                     li.textContent = a + ": " + data[a];
                     ul.appendChild(li);
                 }
@@ -52,6 +56,20 @@ $MyObj.prototype = {
         })
             .done(function(data){
                 result.appendChild(displayResult(JSON.parse(data).form));
+                if(hasShownAccordion) {
+                    $("#postResult").accordion({
+                        collapsible: true,
+                        icons: {
+                            header: "fa fa-arrow-circle-right",
+                            activeHeader: "fa fa-arrow-circle-down"
+                        },
+                        create: function (event, ui) {
+                            result = document.getElementById("postResult");
+                            var span = result.querySelector("span");
+                            span.classList.remove("ui-icon");
+                        }
+                    });
+                }
             })
             .fail(function(jqXHR, textStatus){
                 result.textContent = jqXHR.status + ": " + jqXHR.statusText;
@@ -102,4 +120,7 @@ myObj.addEvent(document.getElementById("testPost"), "click", function(e){
     if(myObj.validateForm()){
         myObj.postForm();
     }
+});
+
+$(function(){
 });
