@@ -26,6 +26,24 @@ $MyObj.prototype = {
     postForm: function(){
         var data = $("#myPostForm").serialize();
         var result = document.getElementById("postResult");
+        var displayResult = function(data){
+            var ul = document.createElement("ul");
+            var li = document.createElement("li");
+            ul.classList.add("list-group");
+            li.classList.add("list-group-item");
+            li.classList.add("active");
+            li.textContent = "Successful! Respond data"
+            ul.appendChild(li);
+            for(var a in data){
+                if(data.hasOwnProperty(a)){
+                    li = document.createElement("li");
+                    li.classList.add("list-group-item");
+                    li.textContent = a + ": " + data[a];
+                    ul.appendChild(li);
+                }
+            }
+            return ul;
+        }
         $.ajax({
             method: "POST",
             dataType: "html",
@@ -33,8 +51,7 @@ $MyObj.prototype = {
             data:data
         })
             .done(function(data){
-                document.getElementById("postResult").textContent = data;
-                result.classList.add("alert-success");
+                result.appendChild(displayResult(JSON.parse(data).form));
             })
             .fail(function(jqXHR, textStatus){
                 result.textContent = jqXHR.status + ": " + jqXHR.statusText;
