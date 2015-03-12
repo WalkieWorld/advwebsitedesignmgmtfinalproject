@@ -121,6 +121,3 @@ myObj.addEvent(document.getElementById("testPost"), "click", function(e){
         myObj.postForm();
     }
 });
-
-$(function(){
-});
