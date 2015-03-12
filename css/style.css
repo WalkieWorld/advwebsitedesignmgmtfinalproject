@@ -21,6 +21,7 @@ html, body{
 }
 .content-horizontal > article{
     margin-left: 20px;
+    width: 100%;
 }
 nav{
     background-color: #ffffff;
@@ -93,4 +94,10 @@ footer{
 label.error{
     color: #a94442;
     background-color: #f2dede;
+}
+.btn{
+    height: 100%;
+}
+.wrap-btn{
+    padding-right: 24px;
 }
