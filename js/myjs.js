@@ -15,6 +15,31 @@ var $MyObj = function(){
         url: "https://httpbin.org/get"
     })
         .done(callbackDisplayIP);
+
+    this.webInfo = [
+        { firstname: "Hao" },
+        { lastname: "Zhang" },
+        { course: "Advanced Website Design and Management"}
+    ];
+    var storeLocalStorage = function(key, value){
+        if(localStorage){
+            return localStorage.setItem(key, value);
+        }
+        throw "The browser doesn't support localStorage";
+    }
+
+    try{
+        (function(webInfo){
+            webInfo.forEach(function(curVal, index, arr){
+                for(var e in curVal){
+                    storeLocalStorage(e, curVal[e]);
+                }
+            });
+        })(this.webInfo);
+    }
+    catch (ex){
+        alert(ex);
+    }
 }
 
 $MyObj.prototype = {
@@ -111,16 +136,50 @@ $MyObj.prototype = {
         }
 
         return false;
+    },
+    retrieveLocalStorage: function(key){
+        if(localStorage){
+            return localStorage.getItem(key);
+        }
+        throw "The browser doesn't support localStorage";
+    },
+    displayWebInfo: function(key, value){
+        var section = document.createElement("section");
+        var label = document.createElement("label");
+        var article = document.createElement("article");
+        var p = document.createElement("p");
+        section.classList.add("form-group");
+        label.classList.add("col-sm-2");
+        label.classList.add("control-label");
+        label.textContent = key;
+        article.classList.add("col-sm-10");
+        p.classList.add("form-control-static");
+        p.textContent = value;
+        article.appendChild(p);
+        section.appendChild(label);
+        section.appendChild(article);
+        return section;
     }
 }
 
 var myObj = new $MyObj();
-myObj.addEvent(document.getElementById("testPost"), "click", function(e){
-    e.preventDefault();
-    if(myObj.validateForm()){
-        myObj.postForm();
-    }
-});
 
 $(function(){
+    myObj.addEvent(document.getElementById("testPost"), "click", function(e){
+        e.preventDefault();
+        if(myObj.validateForm()){
+            myObj.postForm();
+        }
+    });
+    $("#retrieveContent").on("click", function(e){
+        e.preventDefault();
+        $("#retrieveContent").parent().next("article").removeClass("hidden");
+        if($("#webInfoForm").empty()) {
+            myObj.webInfo.forEach(function (curVal, index, arr) {
+                for (var e in curVal) {
+                    $("#webInfoForm").append(myObj.displayWebInfo(e, myObj.retrieveLocalStorage(e)));
+                }
+            });
+        }
+    });
 });
