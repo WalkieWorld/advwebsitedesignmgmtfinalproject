@@ -3,52 +3,66 @@
  */
 
 var $MyObj = function(){
-    var callbackDisplayIP = function(data){
-        var handler = document.getElementById("myIP");
-        if(handler !== null){
-            handler.textContent = "My IP: " + data.origin;
-        }
-    }
-    $.ajax({
-        method: "GET",
-        dataType: "json",
-        url: "https://httpbin.org/get"
-    })
-        .done(callbackDisplayIP);
-
     this.webInfo = [
-        { firstname: "Hao" },
-        { lastname: "Zhang" },
+        { "first name": "Hao" },
+        { "last name": "Zhang" },
         { course: "Advanced Website Design and Management"}
     ];
-    var storeLocalStorage = function(key, value){
-        if(localStorage){
-            return localStorage.setItem(key, value);
-        }
-        throw "The browser doesn't support localStorage";
-    }
 
-    try{
-        (function(webInfo){
-            webInfo.forEach(function(curVal, index, arr){
-                for(var e in curVal){
-                    storeLocalStorage(e, curVal[e]);
-                }
-            });
-        })(this.webInfo);
-    }
-    catch (ex){
-        alert(ex);
-    }
+    this.flickr = {
+        parameterObj: {
+            user_id: "131882319@N03",
+            format: "json",
+            api_key: "825d81f91ec9858b536687a2efe8a1f7",
+            method: undefined
+        },
+        basicUrl: "https://api.flickr.com/services/rest/?"
+    };
+
 }
 
 $MyObj.prototype = {
+    get getCurrentFile(){
+        var url = window.location.pathname;
+        var filename = url.substring(url.lastIndexOf('/')+1);
+        return filename;
+    },
+    get getCurrentIP() {
+        var callbackDisplayIP = function(data){
+            var handler = document.getElementById("myIP");
+            if(handler !== null){
+                handler.textContent = "My IP: " + data.origin;
+            }
+        }
+        $.ajax({
+            method: "GET",
+            dataType: "json",
+            url: "https://httpbin.org/get"
+        })
+            .done(callbackDisplayIP);
+    },
     addEvent: function(handler, event, fun){
         if(handler !== null){
             handler.addEventListener(event, fun);
         }
     },
+    displayPostForm: function(data){
+        var ul = document.createElement("ul");
+        var li = document.createElement("li");
+        ul.classList.add("list-group");
+        for(var a in data){
+            if(data.hasOwnProperty(a)){
+                li = document.createElement("li");
+                li.classList.add("list-group-item");
+                li.classList.add("list-group-item-info");
+                li.textContent = a + ": " + data[a];
+                ul.appendChild(li);
+            }
+        }
+        return ul;
+    },
     postForm: function(){
+        var that = this;
         var data = $("#myPostForm").serialize();
         var result = document.getElementById("postResult");
         var hasShownAccordion = (function(){
@@ -58,21 +72,6 @@ $MyObj.prototype = {
             result.classList.remove("hidden");
         }
         result = result.querySelector("div");
-        var displayResult = function(data){
-            var ul = document.createElement("ul");
-            var li = document.createElement("li");
-            ul.classList.add("list-group");
-            for(var a in data){
-                if(data.hasOwnProperty(a)){
-                    li = document.createElement("li");
-                    li.classList.add("list-group-item");
-                    li.classList.add("list-group-item-info");
-                    li.textContent = a + ": " + data[a];
-                    ul.appendChild(li);
-                }
-            }
-            return ul;
-        }
         $.ajax({
             method: "POST",
             dataType: "html",
@@ -80,7 +79,7 @@ $MyObj.prototype = {
             data:data
         })
             .done(function(data){
-                result.appendChild(displayResult(JSON.parse(data).form));
+                result.appendChild(that.displayPostForm(JSON.parse(data).form));
                 if(hasShownAccordion) {
                     $("#postResult").accordion({
                         collapsible: true,
@@ -134,11 +133,22 @@ $MyObj.prototype = {
         if(form.form()){
             return true;
         }
-
         return false;
     },
-    retrieveLocalStorage: function(key){
-        if(localStorage){
+    set setWebInfo(data){
+        if(window.localStorage){
+            data.forEach(function(curVal, index, arr){
+                for(var key in curVal){
+                    localStorage.setItem(key, curVal[key]);
+                }
+            });
+        }else{
+            throw "The browser doesn't support localStorage";
+        }
+
+    },
+    retrieveWebInfo: function(key){
+        if(window.localStorage){
             return localStorage.getItem(key);
         }
         throw "The browser doesn't support localStorage";
@@ -159,27 +169,123 @@ $MyObj.prototype = {
         section.appendChild(label);
         section.appendChild(article);
         return section;
+    },
+    generateUrl: function(method){
+        var parameters = "";
+        this.flickr.parameterObj.method = method;
+        for(var e in this.flickr.parameterObj){
+            parameters += e + "=" + this.flickr.parameterObj[e] + "&";
+        }
+        return this.flickr.basicUrl + parameters + "jsoncallback";
+    },
+    get getAlbumList(){
+        var that = this;
+        $.ajax({
+            method: "GET",
+            dataType: "jsonp",
+            jsonp: 'jsoncallback',
+            url: that.generateUrl("flickr.photosets.getList")
+        })
+            .done(function(data){
+                that.displayAlbumList(data, document.getElementById("albumList"));
+                that.addEvent(document.getElementById("albumSelect"),"change", function(e){
+                    if(e.target.value !== ""){
+                        that.getAlbum(e.target.value, "flickr.photosets.getPhotos");
+                    }
+                });
+            })
+            .fail(function(jqXHR, textStatus){
+                alert(jqXHR.status + ": " + jqXHR.statusText + ": " + textStatus);
+            });
+    },
+    displayAlbumList: function(data, parentNode){
+        var albumList = data.photosets.photoset;
+        var select = document.createElement("select");
+        var option = document.createElement("option");
+        select.classList.add("form-control");
+        select.id = "albumSelect";
+        select.appendChild(option);
+        albumList.forEach(function(curVal, index, arr){
+            option = document.createElement("option");
+            option.textContent = curVal.title._content;
+            option.value = curVal.id;
+            select.appendChild(option);
+        });
+        parentNode.appendChild(select);
+    },
+    get getAlbumInfo(){
+        //
+    },
+    getAlbum: function(albumId, method){
+        var that = this;
+        this.flickr.parameterObj["photoset_id"] = albumId;
+        $.ajax({
+            method: "GET",
+            dataType: "jsonp",
+            jsonp: 'jsoncallback',
+            url: that.generateUrl(method)
+        })
+            .done(function(data){
+                var section = document.createElement("section");
+                section.classList.add("row");
+                data.photoset.photo.forEach(function(curVal, index, arr){
+                    section = that.displayAlbum(curVal, section);
+                });
+                var mainBody = document.getElementsByClassName("main-body")[0];
+                mainBody.querySelector(".container").appendChild(section);
+            })
+            .fail(function(jqXHR, textStatus){
+                alert(jqXHR.status + ": " + jqXHR.statusText + ": " + textStatus);
+            });
+    },
+    displayAlbum: function(data, handler){
+        var div = document.createElement("div");
+        var figure = document.createElement("figure");
+        var img = document.createElement("img");
+        div.classList.add("col-xs-6");
+        div.classList.add("col-md-3");
+        figure.classList.add("thumbnail");
+        img.src = "https://farm" + data.farm + ".staticflickr.com/" + data.server + "/" + data.id + "_" + data.secret + ".jpg";
+        img.id = data.id;
+        figure.appendChild(img);
+        div.appendChild(figure);
+        handler.appendChild(div);
+        return handler;
     }
 }
 
 var myObj = new $MyObj();
 
 $(function(){
-    myObj.addEvent(document.getElementById("testPost"), "click", function(e){
-        e.preventDefault();
-        if(myObj.validateForm()){
-            myObj.postForm();
-        }
-    });
-    $("#retrieveContent").on("click", function(e){
-        e.preventDefault();
-        $("#retrieveContent").parent().next("article").removeClass("hidden");
-        if($("#webInfoForm").empty()) {
-            myObj.webInfo.forEach(function (curVal, index, arr) {
-                for (var e in curVal) {
-                    $("#webInfoForm").append(myObj.displayWebInfo(e, myObj.retrieveLocalStorage(e)));
+    myObj.getCurrentIP;
+
+    switch (myObj.getCurrentFile){
+        case "index.html":
+            myObj.setWebInfo = myObj.webInfo;
+            $("#retrieveContent").on("click", function(e){
+                e.preventDefault();
+                $("#retrieveContent").parent().next("article").removeClass("hidden");
+                if($("#webInfoForm").empty()) {
+                    myObj.webInfo.forEach(function (curVal, index, arr) {
+                        for (var e in curVal) {
+                            $("#webInfoForm").append(myObj.displayWebInfo(e, myObj.retrieveWebInfo(e)));
+                        }
+                    });
                 }
             });
-        }
-    });
+            break;
+        case "contact.html":
+            myObj.addEvent(document.getElementById("testPost"), "click", function(e){
+                e.preventDefault();
+                if(myObj.validateForm()){
+                    myObj.postForm();
+                }
+            });
+            break;
+        case "gallery.html":
+            myObj.getAlbumList;
+            break;
+        default :
+            break;
+    }
 });
