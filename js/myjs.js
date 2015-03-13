@@ -19,6 +19,8 @@ var $MyObj = function(){
         basicUrl: "https://api.flickr.com/services/rest/?"
     };
 
+    var mainBody = document.getElementsByClassName("main-body")[0];
+    this.placeAlbumHandler = mainBody.querySelector(".container");
 }
 
 $MyObj.prototype = {
@@ -190,6 +192,10 @@ $MyObj.prototype = {
                 that.displayAlbumList(data, document.getElementById("albumList"));
                 that.addEvent(document.getElementById("albumSelect"),"change", function(e){
                     if(e.target.value !== ""){
+                        var albumLocation = that.placeAlbumHandler.querySelector("section[class='row']");
+                        if(albumLocation !== null){
+                            albumLocation.remove();
+                        }
                         that.getAlbum(e.target.value, "flickr.photosets.getPhotos");
                     }
                 });
@@ -228,11 +234,10 @@ $MyObj.prototype = {
             .done(function(data){
                 var section = document.createElement("section");
                 section.classList.add("row");
-                data.photoset.photo.forEach(function(curVal, index, arr){
+                $.each(data.photoset.photo,function(index, curVal){
                     section = that.displayAlbum(curVal, section);
+                    that.placeAlbumHandler.appendChild(section);
                 });
-                var mainBody = document.getElementsByClassName("main-body")[0];
-                mainBody.querySelector(".container").appendChild(section);
             })
             .fail(function(jqXHR, textStatus){
                 alert(jqXHR.status + ": " + jqXHR.statusText + ": " + textStatus);
