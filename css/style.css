@@ -101,3 +101,6 @@ label.error{
 .wrap-btn{
     padding-right: 24px;
 }
+.modal-dialog {
+    width: 1054px;
+}

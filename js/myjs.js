@@ -247,19 +247,40 @@ $MyObj.prototype = {
             .fail(function(jqXHR, textStatus){
                 alert(jqXHR.status + ": " + jqXHR.statusText + ": " + textStatus);
             });
+        delete this.flickr.parameterObj["photoset_id"];
     },
     displayAlbum: function(data, handler){
+        "use strict"
+        var bsrc = "https://farm" + data.farm + ".staticflickr.com/" + data.server + "/" + data.id + "_" + data.secret + "_b" + ".jpg";
         var div = document.createElement("div");
+        var a = document.createElement("a");
         var figure = document.createElement("figure");
         var img = document.createElement("img");
         div.classList.add("col-xs-6");
         div.classList.add("col-md-3");
+        a.href = bsrc;
+        a.setAttribute("data-toggle", "modal");
+        a.setAttribute("data-target", "#largeImage");
         figure.classList.add("thumbnail");
         img.src = "https://farm" + data.farm + ".staticflickr.com/" + data.server + "/" + data.id + "_" + data.secret + ".jpg";
         img.id = data.id;
         figure.appendChild(img);
-        div.appendChild(figure);
+        a.appendChild(figure);
+        div.appendChild(a);
         handler.appendChild(div);
+        this.addEvent(a, "click", function(e){
+            e.preventDefault();
+            var p = document.getElementById("viewImage");
+            if(p.hasChildNodes()){
+                p.removeChild(p.firstChild);
+            }
+            var figure = document.createElement("figure");
+            var img = document.createElement("img");
+            document.getElementById("imageTitle").textContent = data.title;
+            img.src = e.currentTarget.href;
+            figure.appendChild(img);
+            p.appendChild(figure);
+        });
         return handler;
     }
 }
