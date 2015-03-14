@@ -251,6 +251,7 @@ $MyObj.prototype = {
     },
     displayAlbum: function(data, handler){
         "use strict"
+        var that = this;
         var bsrc = "https://farm" + data.farm + ".staticflickr.com/" + data.server + "/" + data.id + "_" + data.secret + "_b" + ".jpg";
         var div = document.createElement("div");
         var a = document.createElement("a");
@@ -258,9 +259,27 @@ $MyObj.prototype = {
         var img = document.createElement("img");
         div.classList.add("col-xs-6");
         div.classList.add("col-md-3");
-        a.href = bsrc;
+        a.href = "#";
+        a.setAttribute("data-src", bsrc);
         a.setAttribute("data-toggle", "modal");
         a.setAttribute("data-target", "#largeImage");
+        new Promise(function(resolve, reject){
+            resolve(data.title);
+        }).then(function(d){
+                that.addEvent(a, "click", function(e){
+                e.preventDefault();
+                var p = document.getElementById("viewImage");
+                if(p.hasChildNodes()){
+                    p.removeChild(p.firstChild);
+                }
+                var figure = document.createElement("figure");
+                var img = document.createElement("img");
+                document.getElementById("imageTitle").textContent = d;
+                img.src = e.currentTarget.dataset.src;
+                figure.appendChild(img);
+                p.appendChild(figure);
+            });
+        }, null);
         figure.classList.add("thumbnail");
         img.src = "https://farm" + data.farm + ".staticflickr.com/" + data.server + "/" + data.id + "_" + data.secret + ".jpg";
         img.id = data.id;
@@ -268,19 +287,6 @@ $MyObj.prototype = {
         a.appendChild(figure);
         div.appendChild(a);
         handler.appendChild(div);
-        this.addEvent(a, "click", function(e){
-            e.preventDefault();
-            var p = document.getElementById("viewImage");
-            if(p.hasChildNodes()){
-                p.removeChild(p.firstChild);
-            }
-            var figure = document.createElement("figure");
-            var img = document.createElement("img");
-            document.getElementById("imageTitle").textContent = data.title;
-            img.src = e.currentTarget.href;
-            figure.appendChild(img);
-            p.appendChild(figure);
-        });
         return handler;
     }
 }
@@ -316,6 +322,7 @@ $(function(){
             break;
         case "gallery.html":
             myObj.getAlbumList;
+
             break;
         default :
             break;
