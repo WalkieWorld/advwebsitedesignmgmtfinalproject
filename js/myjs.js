@@ -24,6 +24,15 @@ var $MyObj = function(){
 }
 
 $MyObj.prototype = {
+    initScrollNav: function(){
+        $( window ).scroll(function() {
+            if(window.scrollY - document.querySelector(".navbar-fixed-top").clientHeight > 0){
+                $( "#primary-nav a" ).switchClass( "", "scrollable", 2100 );
+            }else{
+                $( "#primary-nav a" ).switchClass( "scrollable", "", 2100 );
+            }
+        });
+    },
     get getCurrentFile(){
         var url = window.location.pathname;
         var filename = url.substring(url.lastIndexOf('/')+1);
@@ -295,7 +304,12 @@ var myObj = new $MyObj();
 
 $(function(){
     myObj.getCurrentIP;
+    myObj.initScrollNav();
 
+    /*
+    * For each page, when document is ready,
+    * the window will load related functions.
+    * */
     switch (myObj.getCurrentFile){
         case "":
         case "index.html":
@@ -322,7 +336,6 @@ $(function(){
             break;
         case "gallery.html":
             myObj.getAlbumList;
-
             break;
         default :
             break;
