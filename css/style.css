@@ -23,6 +23,15 @@ html, body{
     margin-left: 20px;
     width: 100%;
 }
+.content-horizontal dl{
+    display: flex;
+    display: -webkit-flex;
+    padding: 0px 10px;
+    margin-left: 5px;
+}
+.content-horizontal dl>dd{
+    padding-left: 5px;
+}
 nav{
     background-color: #ffffff;
 }
@@ -84,7 +93,7 @@ footer{
     bottom: 0px;
     background: #EEEEEE;
     margin-top: 40px;
-    height: 100px;
+    height: 60px;
     border-top: 1px solid #CCCCCC;
     width: 100%;
 }
