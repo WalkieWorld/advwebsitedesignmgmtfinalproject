@@ -189,16 +189,20 @@ $MyObj.prototype = {
             url: that.generateUrl("flickr.photosets.getList")
         })
             .done(function(data){
-                that.displayAlbumList(data, document.getElementById("albumList"));
-                that.addEvent(document.getElementById("albumSelect"),"change", function(e){
-                    if(e.target.value !== ""){
-                        var albumLocation = that.placeAlbumHandler.querySelector("section[class='row']");
-                        if(albumLocation !== null){
-                            albumLocation.remove();
+                new Promise(function(resolve, reject){
+                    resolve(data);
+                }).then(function(d){
+                    that.displayAlbumList(d, document.getElementById("albumList"));
+                    that.addEvent(document.getElementById("albumSelect"),"change", function(e){
+                        if(e.target.value !== ""){
+                            var albumLocation = that.placeAlbumHandler.querySelector("section[class='row']");
+                            if(albumLocation !== null){
+                                albumLocation.remove();
+                            }
+                            that.getAlbum(e.target.value, "flickr.photosets.getPhotos");
                         }
-                        that.getAlbum(e.target.value, "flickr.photosets.getPhotos");
-                    }
-                });
+                    });
+                }, null);
             })
             .fail(function(jqXHR, textStatus){
                 alert(jqXHR.status + ": " + jqXHR.statusText + ": " + textStatus);
@@ -219,9 +223,6 @@ $MyObj.prototype = {
         });
         parentNode.appendChild(select);
     },
-    get getAlbumInfo(){
-        //
-    },
     getAlbum: function(albumId, method){
         var that = this;
         this.flickr.parameterObj["photoset_id"] = albumId;
@@ -232,12 +233,16 @@ $MyObj.prototype = {
             url: that.generateUrl(method)
         })
             .done(function(data){
-                var section = document.createElement("section");
-                section.classList.add("row");
-                $.each(data.photoset.photo,function(index, curVal){
-                    section = that.displayAlbum(curVal, section);
-                    that.placeAlbumHandler.appendChild(section);
-                });
+                new Promise(function(resolve, reject){
+                    resolve(data);
+                }).then(function(d){
+                        var section = document.createElement("section");
+                        section.classList.add("row");
+                        $.each(d.photoset.photo,function(index, curVal){
+                            section = that.displayAlbum(curVal, section);
+                            that.placeAlbumHandler.appendChild(section);
+                        });
+                    }, null);
             })
             .fail(function(jqXHR, textStatus){
                 alert(jqXHR.status + ": " + jqXHR.statusText + ": " + textStatus);
@@ -265,6 +270,7 @@ $(function(){
     myObj.getCurrentIP;
 
     switch (myObj.getCurrentFile){
+        case "":
         case "index.html":
             myObj.setWebInfo = myObj.webInfo;
             $("#retrieveContent").on("click", function(e){
